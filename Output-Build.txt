@@ -1,0 +1,4 @@
+Build started...
+1>------ Build started: Project: TRANSFER PARAMETERS, Configuration: Debug x64 ------
+1>TRANSFER PARAMETERS.vcxproj -> C:\Users\Yura\source\repos\POINTS\x64\Debug\TRANSFER PARAMETERS.exe
+========== Build: 1 succeeded, 0 failed, 0 up-to-date, 0 skipped ==========
