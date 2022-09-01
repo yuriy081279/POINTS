@@ -1,6 +1,6 @@
 #include<iostream>
 using namespace std;
-void Exchange(int a, int b);
+void Exchange(int& a, int& b);
 void main()
 {
 	setlocale(LC_ALL, "");
@@ -11,7 +11,7 @@ void main()
 
 }
 
-void Exchange(int a, int b)
+void Exchange(int& a, int& b)
 {
 	int buffer = a;
 	a = b;
