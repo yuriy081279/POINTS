@@ -10,20 +10,19 @@ void main()
 	int d = 0;//Переменная для ограничения размера массива Odd в соответствии с количеством элементов, которые в него войдут
 	
 	cout << "Введите размер массива: "; cin >> n;
-	int* arr = new int[n];
+	int* arr = new int[n];	
 	int* even = new int[c];
 	int* odd = new int[d];
     for (int i = 0; i < n; i++)
 	{
-		*(arr + i) = rand() % 8;				
+		*(arr + i) = rand() % 100;				
 	}
 	cout << endl;
 	for (int i = 0; i < n; i++)
 	{
 		cout << arr[i] << "   ";
 	}
-	cout << endl;
-	
+	cout << endl;	
 	for (int i = 0; i < n; i++)
 	{
 		x = arr[i] % 2;
@@ -38,7 +37,8 @@ void main()
 			d++;
 		}
 	}
-	//delete[] arr;
+	
+	delete[] arr;
 	cout << endl;
 	cout << "Вывод нечетных элементов в отдельный массив \"ОДД\"";
 	cout << endl;
@@ -46,15 +46,15 @@ void main()
 	{
 		cout << odd[i] << "\t";
 	}
-	//delete[] odd;
+	
 	cout << endl;
 	cout << "Вывод четных элементов в отдельный массив \"ИВЭН\"";
 	cout << endl;
 	for (int i = 0; i < c; i++)
 	{
 		cout << even[i] << "\t";
-	}
-	//delete[] even;
+	}	
+	
 }
 
 
