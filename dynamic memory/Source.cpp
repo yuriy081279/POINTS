@@ -28,21 +28,21 @@ void Print(int** arr, const int rows, const int cols);
 void Allocate(int** arr, const int rows, const int cols);
 void Clear(int** arr, const int rows, const int cols);
 
-int** push_back(int** arr, int& rows, int cols);
-int** push_front(int** arr, int& rows, int& cols);
-int** insert(int** arr, int& rows, int& cols, int nomer_stroki);
+int** push_row_back(int** arr, int& rows, int cols);
+int** push_row_front(int** arr, int& rows, int& cols);
+int** row_insert(int** arr, int& rows, int& cols, int nomer_stroki);
 
-int** pop_back(int** arr, int& rows, int& cols);
-int** pop_front(int** arr, int& rows, int& cols);
-int** erase(int** arr, int& rows, int& cols, int nomer_stroki);
+int** pop_row_back(int** arr, int& rows, int& cols);
+int** pop_row_front(int** arr, int& rows, int& cols);
+int** erase_row(int** arr, int& rows, int& cols, int nomer_stroki);
 
-int** push_cols_back(int** arr, int& rows, int& cols);
-int** push_cols_front(int** arr, int& rows, int& cols);
-int** insert_cols(int** arr, int& rows, int& cols, int nomer_stolba);
+void push_cols_back(int** arr, const int rows, int& cols);
+int** push_cols_front(int** arr, int rows, int& cols);
+int** insert_cols(int** arr, int rows, int& cols, int nomer_stolba);
 
-int** pop_cols_back(int** arr, int& rows, int& cols);
-int** pop_cols_front(int** arr, int& rows, int& cols);
-int** erase_cols(int** arr, int& rows, int& cols, int nomer_stolba);
+int** pop_cols_back(int** arr, int rows, int& cols);
+int** pop_cols_front(int** arr, int rows, int& cols);
+int** erase_cols(int** arr, int rows, int& cols, int nomer_stolba);
 
 void main()
 {
@@ -87,6 +87,7 @@ void main()
 
 	delete[] arr;
 #endif // DYNAMIC_MEMORY_1
+
 #ifdef DYNAMIC_MEMORY_2
 	int rows, cols;
 
@@ -105,7 +106,7 @@ void main()
 	key = _getch();
 	switch (key)
 	{
-	case Enter: arr = push_back(arr, rows, cols), Print(arr, rows, cols); break;
+	case Enter: arr = push_row_back(arr, rows, cols), Print(arr, rows, cols); break;
 	default: cout << "Вы нажали не ту кнопку, можете пропустить это задание и продолжить, или перезапустите программу. " << endl;
 	}
 
@@ -114,7 +115,7 @@ void main()
 	key = _getch();
 	switch (key)
 	{
-	case Enter: arr = push_front(arr, rows, cols), Print(arr, rows, cols); break;
+	case Enter: arr = push_row_front(arr, rows, cols), Print(arr, rows, cols); break;
 	default: cout << "Вы нажали не ту кнопку, можете пропустить это задание и продолжить, или перезапустите программу. " << endl;
 	}
 
@@ -126,25 +127,40 @@ void main()
 	}
 	else
 	{
-		arr = insert(arr, rows, cols, nomer_stroki);
+		arr = row_insert(arr, rows, cols, nomer_stroki);
 		Print(arr, rows, cols);
 	}
 
 	cout << endl;
-	arr = pop_back(arr, rows, cols);
-	Print(arr, rows, cols);
-
+	cout << "Нажмите Энтер, чтобы удалить дополнительную строку массива снизу: " << endl;
+	key = _getch();
+	switch (key)
+	{
+	case Enter: arr = pop_row_back(arr, rows, cols), Print(arr, rows, cols); break;
+	default: cout << "Вы нажали не ту кнопку, можете пропустить это задание и продолжить, или перезапустите программу. " << endl;
+	}
+	
 	cout << endl;
-	arr = pop_front(arr, rows, cols);
-	Print(arr, rows, cols);
-
+	cout << "Нажмите Энтер, чтобы удалить дополнительную строку массива сверху: " << endl;
+	key = _getch();
+	switch (key)
+	{
+	case Enter: arr = pop_row_front(arr, rows, cols), Print(arr, rows, cols); break;
+	default: cout << "Вы нажали не ту кнопку, можете пропустить это задание и продолжить, или перезапустите программу. " << endl;
+	}
+	
 	cout << endl;
-	arr = erase(arr, rows, cols, nomer_stroki);
-	Print(arr, rows, cols);
-
-
+	cout << "Нажмите Энтер, чтобы удалить дополнительную строку массива под номером: "<< nomer_stroki-1 << endl;
+	key = _getch();
+	switch (key)
+	{
+	case Enter: arr = erase_row(arr, rows, cols, nomer_stroki), Print(arr, rows, cols); break;
+	default: cout << "Вы нажали не ту кнопку, можете пропустить это задание и продолжить, или перезапустите программу. " << endl;
+	}
+	
+	
 	cout << endl;
-	arr = push_cols_back(arr, rows, cols);
+	push_cols_back (arr, rows, cols);
 	Print(arr, rows, cols);
 
 	cout << endl;
@@ -319,7 +335,7 @@ int* erase(int* arr, int& n, int x)
 	n--;
 	return arr;
 }
-int** push_back(int** arr, int& rows, int cols)
+int** push_row_back(int** arr, int& rows, int cols)
 {
 	int** buffer = new int* [rows+1];
 	for (int i = 0; i < rows + 1; i++)
@@ -332,7 +348,7 @@ int** push_back(int** arr, int& rows, int cols)
 	rows++;
 	return buffer;
 }
-int** push_front(int** arr, int& rows, int& cols)
+int** push_row_front(int** arr, int& rows, int& cols)
 {
 	int** buffer = new int* [rows + 1];
 	for (int i = 0; i < rows + 1; i++)
@@ -345,7 +361,7 @@ int** push_front(int** arr, int& rows, int& cols)
 	rows++;
 	return buffer;
 }
-int** insert(int** arr, int& rows, int& cols, int nomer_stroki)
+int** row_insert(int** arr, int& rows, int& cols, int nomer_stroki)
 {
 	int** buffer = new int* [rows + 1];
 	for (int i = 0; i < rows + 1; i++)
@@ -366,7 +382,7 @@ int** insert(int** arr, int& rows, int& cols, int nomer_stroki)
 	return buffer;
 }
 
-int** pop_back(int** arr, int& rows, int& cols)
+int** pop_row_back(int** arr, int& rows, int& cols)
 {
 	int** buffer = new int* [rows - 1];
 	for (int i = 0; i < rows - 1; i++)
@@ -378,7 +394,7 @@ int** pop_back(int** arr, int& rows, int& cols)
 	rows--;
 	return buffer;
 }
-int** pop_front(int** arr, int& rows, int& cols)
+int** pop_row_front(int** arr, int& rows, int& cols)
 {
 	int** buffer = new int* [rows - 1];
 	for (int i = 0; i < rows - 1; i++)
@@ -389,7 +405,7 @@ int** pop_front(int** arr, int& rows, int& cols)
 	rows--;
 	return buffer;	
 }
-int** erase(int** arr, int& rows, int& cols, int nomer_stroki)
+int** erase_row(int** arr, int& rows, int& cols, int nomer_stroki)
 {
 	int** buffer = new int* [rows - 1];
 	for (int i = 0; i < rows - 1; i++)
@@ -408,163 +424,106 @@ int** erase(int** arr, int& rows, int& cols, int nomer_stroki)
 	return buffer;	
 }
 
-int** push_cols_back(int** arr, int& rows, int& cols)
+void push_cols_back(int** arr, const int rows, int& cols)
+{		
+	for (int i = 0; i < rows; i++)
+	{
+		int* buffer = new int[cols+1]{};
+		for (int j = 0; j < cols; j++)
+		{
+			buffer[j] = arr[i][j];
+		}	
+		delete[] arr[i];
+		arr[i] = buffer;
+	}		
+	cols++;	
+}
+int** push_cols_front(int** arr, int rows, int& cols)
 {	
-	int** buffer = new int* [rows];
 	for (int i = 0; i < rows; i++)
 	{
-
-		buffer[i] = new int[cols + 1];
-
-	}
-	for (int i = 0; i < rows; i++)
-	{
-		for (int j = 0; j < cols + 1; j++)
+		int* buffer = new int[cols + 1]{};
+		for (int j = 0; j < cols; j++)
 		{
-			if (j == cols)
-			{
-				buffer[i][j] = {};
-			}
-			if (j < cols)
-			{
-				buffer[i][j] = arr[i][j];
-			}
+			buffer[j+1] = arr[i][j];
 		}
-	}
-	Clear(arr, rows, cols);
-	arr = buffer;
-	cols++;
-	return arr;
-	
-}
-int** push_cols_front(int** arr, int& rows, int& cols)
-{
-	int** buffer = new int* [rows];
-	for (int i = 0; i < rows; i++)
-	{
-		
-		buffer[i] = new int[cols + 1];
-		
-	}
-	for (int i = 0; i < rows; i++)
-	{
-		for (int j = 0; j < cols + 1; j++)
-		{
-			if (j == 0)
-			{
-				buffer[i][j] = {};
-			}
-			if (j > 0)
-			{
-				buffer[i][j] = arr[i][j - 1];
-			}
-		}
-	}
-	Clear(arr, rows, cols);
-	arr = buffer;
+		delete[] arr[i];
+		arr[i] = buffer;
+	}	
 	cols++;
 	return arr;
 }
-int** insert_cols(int** arr, int& rows, int& cols, int nomer_stolba)
+int** insert_cols(int** arr, int rows, int& cols, int nomer_stolba)
 {
-	int** buffer = new int* [rows];
 	for (int i = 0; i < rows; i++)
 	{
+		int* buffer = new int[cols + 1]{};
+		for (int j = 0; j < cols; j++)
 		{
-			buffer[i] = new int[cols + 1];
-		}
-	}
-	for (int i = 0; i < rows; i++)
-	{
-		for (int j = 0; j < cols + 1; j++)
-		{
-			if (j == nomer_stolba - 1)
+			if (j > nomer_stolba - 1)
 			{
-				buffer[i][j] = {};
-			}
-			else if (j > nomer_stolba - 1)
-			{
-				buffer[i][j] = arr[i][j - 1];
+				buffer[j] = arr[i][j-1];
 			}
 			else if (j < nomer_stolba - 1)
 			{
-				buffer[i][j] = arr[i][j];
-			}
+				buffer[j] = arr[i][j];
+			}	
 		}
+		delete[]arr[i];
+		arr[i] = buffer;
 	}
-	Clear(arr, rows, cols);
-	arr = buffer;
 	cols++;
 	return arr;
 }
-int** pop_cols_back(int** arr, int& rows, int& cols)
+int** pop_cols_back(int** arr, int rows, int& cols)
 {
-	int** buffer = new int* [rows];
 	for (int i = 0; i < rows; i++)
 	{
-		{
-			buffer[i] = new int[cols - 1];
-		}
-	}
-	for (int i = 0; i < rows; i++)
-	{
+		int* buffer = new int[cols - 1];		
 		for (int j = 0; j < cols - 1; j++)
 		{
-			buffer[i][j] = arr[i][j];
+			buffer[j] = arr[i][j];
 		}
+		delete[]arr[i];
+		arr[i] = buffer;
 	}
-	Clear(arr, rows, cols);
-	arr = buffer;
 	cols--;
 	return arr;
 }
-int** pop_cols_front(int** arr, int& rows, int& cols)
+int** pop_cols_front(int** arr, int rows, int& cols)
 {
-	int** buffer = new int* [rows];
 	for (int i = 0; i < rows; i++)
 	{
+		int* buffer = new int[cols - 1];
+		for (int j = 0; j < cols-1; j++)
 		{
-			buffer[i] = new int[cols - 1];
+			buffer[j] = arr[i][j+1];
 		}
+		delete[]arr[i];
+		arr[i] = buffer;
 	}
-	for (int i = 0; i < rows; i++)
-	{
-		for (int j = 0; j < cols - 1; j++)
-		{
-			buffer[i][j] = arr[i][j + 1];
-		}
-	}
-	Clear(arr, rows, cols);
-	arr = buffer;
 	cols--;
 	return arr;
 }
-int** erase_cols(int** arr, int& rows, int& cols, int nomer_stolba)
+int** erase_cols(int** arr, int rows, int& cols, int nomer_stolba)
 {
-	int** buffer = new int* [rows];
 	for (int i = 0; i < rows; i++)
 	{
+		int* buffer = new int[cols - 1];
+		for (int j = 0; j < cols; j++)
 		{
-			buffer[i] = new int[cols - 1];
-		}
-	}
-	for (int i = 0; i < rows; i++)
-	{
-		for (int j = 0; j < cols - 1; j++)
-		{
-
-			if (j >= nomer_stolba - 1)
+			if (j < nomer_stolba-1)
 			{
-				buffer[i][j] = arr[i][j + 1];
+				buffer[j] = arr[i][j];
 			}
-			else if (j < nomer_stolba - 1)
+			if (j >= nomer_stolba-1)
 			{
-				buffer[i][j] = arr[i][j];
+				buffer[j] = arr[i][j+1];
 			}
 		}
+		delete[]arr[i];
+		arr[i] = buffer;
 	}
-	Clear(arr, rows, cols);
-	arr = buffer;
 	cols--;
 	return arr;
 }
